@@ -9,6 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.text.bold
+import androidx.core.text.buildSpannedString
+import androidx.core.text.underline
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
@@ -49,20 +52,40 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             //Se cambia la url de la imagen
             Glide.with(binding.imageView3).load(state.recipe?.image).into(binding.imageView3)
 
-            binding.textView5.text = "INGREDIENTES"
 
-            val longitudArr = state.ingredients?.size?.minus(1)
+            val longitudArrR = state.ingredients?.size?.minus(1)
             var strIngredientes = ""
-            if(longitudArr != null){
-                for(it in 0..longitudArr!!){
+            if(longitudArrR != null){
+                for(it in 0..longitudArrR!!){
 
-                    strIngredientes += state.ingredients[it].originalName + "\n"
+                    strIngredientes += "\t-"+state.ingredients[it].originalName + "\n"
 
                 }
             }
 
+            val longitudArrS : Int? = if (state.steps?.size == 0) 0 else state.steps?.get(0)?.steps?.size?.minus(1)
+            var strPasos = ""
+            if(longitudArrS != null && longitudArrS != 0){
+                for(it in 0..longitudArrS!!){
 
-            binding.textView4.text = strIngredientes
+                    strPasos += "\t-"+ state.steps?.get(0)?.steps?.get(it)?.number + "-"+ (state?.steps?.get(0)?.steps?.get(it)?.step) + "\n"
+
+                }
+            }else {
+
+                strPasos = "No hay ningun paso a seguir"
+
+            }
+            binding.textView5.text = buildSpannedString {
+                underline {  bold { append("INGREDIENTES:\n") } }
+                appendLine(strIngredientes)
+
+            }
+
+            binding.textView4.text = buildSpannedString {
+                underline {  bold { append("PASOS:\n") } }
+                appendLine(strPasos)
+            }
         }
 
     }

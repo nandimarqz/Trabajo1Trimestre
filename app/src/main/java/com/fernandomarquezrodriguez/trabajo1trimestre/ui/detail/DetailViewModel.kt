@@ -3,6 +3,7 @@ package com.fernandomarquezrodriguez.trabajo1trimestre.ui.detail
 import androidx.lifecycle.*
 import com.fernandomarquezrodriguez.trabajo1trimestre.model.server.RemoteConnection
 import com.fernandomarquezrodriguez.trabajo1trimestre.model.server.results.Recipe
+import com.fernandomarquezrodriguez.trabajo1trimestre.model.server.results.recipeResult.AnalyzedInstruction
 import com.fernandomarquezrodriguez.trabajo1trimestre.model.server.results.recipeResult.ExtendedIngredient
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +37,16 @@ class DetailViewModel(recipe: Recipe, idRecipe: String, apiKey: String): ViewMod
 
                 )
             }
-            _state.value = _state.value?.copy(ingredients = ingredients )
+
+            val steps = result.analyzedInstructions.map {
+
+                AnalyzedInstruction(
+                    it.name,
+                    it.steps,
+                )
+
+            }
+            _state.value = _state.value?.copy(ingredients = ingredients , steps = steps )
         }
 
     }
@@ -46,7 +56,8 @@ class DetailViewModel(recipe: Recipe, idRecipe: String, apiKey: String): ViewMod
 data class  IngredientsUiState(
 
     val recipe: Recipe? = null,
-    val ingredients: List<ExtendedIngredient>? = null
+    val ingredients: List<ExtendedIngredient>? = null,
+    val steps : List<AnalyzedInstruction>? = null
 
 )
 

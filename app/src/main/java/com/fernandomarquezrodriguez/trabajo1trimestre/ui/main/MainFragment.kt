@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
@@ -13,7 +14,7 @@ import com.fernandomarquezrodriguez.trabajo1trimestre.R
 import com.fernandomarquezrodriguez.trabajo1trimestre.databinding.FragmentMainBinding
 import com.fernandomarquezrodriguez.trabajo1trimestre.ui.detail.DetailFragment
 
-class MainFragment : Fragment(R.layout.fragment_main) {
+class MainFragment : Fragment(R.layout.fragment_main), SearchView.OnQueryTextListener {
 
     private val viewModel: MainViewModel by viewModels{MainViewModel.MainViewModelFactory("99f7bab35f4645379cfa6ac6c7168ab2")}
     private val adapter = RecipeAdapter(){ recipe-> viewModel.navigateTo(recipe)}
@@ -48,10 +49,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 viewModel.onNavigateDone()
             }
 
-
+            binding.searchView.setOnQueryTextListener(this)
 
         }
 
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        TODO("Not yet implemented")
     }
 
 
