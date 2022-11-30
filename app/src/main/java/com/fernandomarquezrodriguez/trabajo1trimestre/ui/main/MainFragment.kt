@@ -14,7 +14,7 @@ import com.fernandomarquezrodriguez.trabajo1trimestre.R
 import com.fernandomarquezrodriguez.trabajo1trimestre.databinding.FragmentMainBinding
 import com.fernandomarquezrodriguez.trabajo1trimestre.ui.detail.DetailFragment
 
-class MainFragment : Fragment(R.layout.fragment_main), SearchView.OnQueryTextListener {
+class MainFragment : Fragment(R.layout.fragment_main) {
 
     private val viewModel: MainViewModel by viewModels{MainViewModel.MainViewModelFactory("99f7bab35f4645379cfa6ac6c7168ab2")}
     private val adapter = RecipeAdapter(){ recipe-> viewModel.navigateTo(recipe)}
@@ -35,6 +35,7 @@ class MainFragment : Fragment(R.layout.fragment_main), SearchView.OnQueryTextLis
             state.recipes?.let {recipes ->
 
                 adapter.recipes = recipes
+                adapter.originalRecipes = recipes
                 adapter.notifyDataSetChanged()
 
             }
@@ -49,19 +50,26 @@ class MainFragment : Fragment(R.layout.fragment_main), SearchView.OnQueryTextLis
                 viewModel.onNavigateDone()
             }
 
-            binding.searchView.setOnQueryTextListener(this)
+            binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    if (p0 != null) {
+                        adapter.filtrado(p0)
+                    }
+                    return false
+                }
+
+                override fun onQueryTextChange(p0: String?): Boolean {
+                    if (p0 != null) {
+                        adapter.filtrado(p0)
+                    }
+                    return false
+                }
+
+            })
 
         }
 
     }
-
-    override fun onQueryTextSubmit(p0: String?): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun onQueryTextChange(p0: String?): Boolean {
-        TODO("Not yet implemented")
-    }
-
 
 }

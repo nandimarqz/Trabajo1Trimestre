@@ -1,5 +1,6 @@
 package com.fernandomarquezrodriguez.trabajo1trimestre.ui.main
 
+import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,17 +10,20 @@ import com.bumptech.glide.Glide
 import com.fernandomarquezrodriguez.trabajo1trimestre.R
 import com.fernandomarquezrodriguez.trabajo1trimestre.databinding.RecipeViewBinding
 import com.fernandomarquezrodriguez.trabajo1trimestre.model.server.results.Recipe
+import java.util.*
+import kotlin.streams.toList
 
 class RecipeAdapter(val listener : (Recipe) ->Unit): RecyclerView.Adapter<RecipeAdapter.ViewHolder>() {
 
     var recipes= emptyList<Recipe>()
+    var originalRecipes= emptyList<Recipe>()
+    lateinit var coleccion : MutableList<Recipe>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         //Guarda la vista inflada en una variable y la devolve pasandola como parametro a viewHolder para que controle la vista
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recipe_view, parent, false)
         return ViewHolder(view)
-
     }
 
     /**
@@ -41,6 +45,38 @@ class RecipeAdapter(val listener : (Recipe) ->Unit): RecyclerView.Adapter<Recipe
         }
 
 
+    }
+
+    fun filtrado(txtSearchView : String){
+
+        val longitud = txtSearchView.length
+
+        if(longitud == 0) {
+
+            recipes = emptyList<Recipe>()
+            recipes = originalRecipes
+
+        }else{
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                 coleccion =
+                     recipes.stream().filter{ i-> i.title.lowercase(Locale.getDefault()).contains(txtSearchView.lowercase(Locale.getDefault()))}.toList() as MutableList<Recipe>
+
+                recipes = coleccion
+            } else {
+                recipes.forEach {recipe ->
+
+                    if(recipe.title.lowercase(Locale.getDefault()).contains(txtSearchView.lowercase(Locale.getDefault()))){
+
+                        coleccion.add(recipe)
+
+                    }
+
+                }
+                recipes = coleccion
+            }
+
+        }
+        notifyDataSetChanged()
     }
 
     /**
