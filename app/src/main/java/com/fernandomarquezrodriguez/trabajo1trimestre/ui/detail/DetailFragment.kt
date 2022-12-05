@@ -1,8 +1,11 @@
 package com.fernandomarquezrodriguez.trabajo1trimestre.ui.detail
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.text.Spannable
+import android.text.style.ForegroundColorSpan
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -77,13 +80,13 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
 
             }
             binding.textView5.text = buildSpannedString {
-                underline {  bold { append("INGREDIENTES:\n") } }
+                underline {  bold { append("INGREDIENTES:\n").setSpan(ForegroundColorSpan(Color.BLACK), 0,12, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) } }
                 appendLine(strIngredientes)
 
             }
 
             binding.textView4.text = buildSpannedString {
-                underline {  bold { append("PASOS:\n") } }
+                underline {  bold { append("PASOS:\n") }.setSpan(ForegroundColorSpan(Color.BLACK), 0,5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) }
                 appendLine(strPasos)
             }
         }
