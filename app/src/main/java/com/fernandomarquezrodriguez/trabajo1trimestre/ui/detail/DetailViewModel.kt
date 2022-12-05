@@ -18,8 +18,11 @@ class DetailViewModel(recipe: Recipe, idRecipe: String, apiKey: String): ViewMod
         //La ejecucion se va realizar por el hilo principal
         viewModelScope.launch(Dispatchers.Main) {
 
+            //se iguala la recetea a la recibida por parametro
             _state.value = _state.value?.copy(recipe = recipe)
+            //Coge el resultado de la llamada a la api
             val result = RemoteConnection.ingredientsService.ingredients(idRecipe, apiKey)
+            //Mapea el resultado y coge los ingredientes
             val ingredients = result.extendedIngredients.map {
                 ExtendedIngredient(
                     it.aisle,
@@ -37,7 +40,7 @@ class DetailViewModel(recipe: Recipe, idRecipe: String, apiKey: String): ViewMod
 
                 )
             }
-
+            //Mapea del resultado las instrucciones y las guarda en una variable
             val steps = result.analyzedInstructions.map {
 
                 AnalyzedInstruction(
@@ -46,6 +49,7 @@ class DetailViewModel(recipe: Recipe, idRecipe: String, apiKey: String): ViewMod
                 )
 
             }
+            //Iguala los ingredientes y los pasos a los mapeados
             _state.value = _state.value?.copy(ingredients = ingredients , steps = steps )
         }
 
@@ -53,6 +57,7 @@ class DetailViewModel(recipe: Recipe, idRecipe: String, apiKey: String): ViewMod
 
 }
 
+//Clase que contiene la variables que se van a usar
 data class  IngredientsUiState(
 
     val recipe: Recipe? = null,
@@ -61,6 +66,7 @@ data class  IngredientsUiState(
 
 )
 
+//Factoria del detailViewModel
 @Suppress("UNCHECKED_CAST")
 class DetailViewModelFactory(private val recipe: Recipe, private val idRecipe: String,  private val apiKey: String  ): ViewModelProvider.Factory{
 

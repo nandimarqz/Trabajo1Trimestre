@@ -55,10 +55,13 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
             //Se cambia la url de la imagen
             Glide.with(binding.imageView3).load(state.recipe?.image).into(binding.imageView3)
 
-
+            //Guarda en una varibale la longitud de la lista
             val longitudArrR = state.ingredients?.size?.minus(1)
             var strIngredientes = ""
+
+            //Si la longitud es distinta a null entra en la condicion
             if(longitudArrR != null){
+                //Recorre el array de ingredientes y los añade a la variable
                 for(it in 0..longitudArrR!!){
 
                     strIngredientes += "\t-"+state.ingredients[it].originalName + "\n"
@@ -66,25 +69,31 @@ class DetailFragment : Fragment(R.layout.fragment_detail) {
                 }
             }
 
+            //Si la longitud del array de pasos es iguaal a 0 se guarda 0 si es distinta se guarda el valor
             val longitudArrS : Int? = if (state.steps?.size == 0) 0 else state.steps?.get(0)?.steps?.size?.minus(1)
             var strPasos = ""
+
+            //Si la longitud es distinto a null y distinto a 0 entra en la condicion si es alguno de los dos entra en el else
             if(longitudArrS != null && longitudArrS != 0){
+                //Recoore la lista de pasos y añade los pasos a una variable
                 for(it in 0..longitudArrS!!){
 
                     strPasos += "\t-"+ state.steps?.get(0)?.steps?.get(it)?.number + "-"+ (state?.steps?.get(0)?.steps?.get(it)?.step) + "\n"
 
                 }
             }else {
-
+                //Se iguala la variable la siguiente string
                 strPasos = "No hay ningun paso a seguir"
 
             }
+            //Se añade al texview lo ingredientes
             binding.textView5.text = buildSpannedString {
                 underline {  bold { append("INGREDIENTES:\n").setSpan(ForegroundColorSpan(Color.BLACK), 0,12, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) } }
                 appendLine(strIngredientes)
 
             }
 
+            //Se añade al textview los pasos
             binding.textView4.text = buildSpannedString {
                 underline {  bold { append("PASOS:\n") }.setSpan(ForegroundColorSpan(Color.BLACK), 0,5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE) }
                 appendLine(strPasos)

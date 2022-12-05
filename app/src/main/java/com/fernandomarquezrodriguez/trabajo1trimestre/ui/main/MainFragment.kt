@@ -23,15 +23,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
 
         val binding =FragmentMainBinding.bind(view).apply {
+
+            //Se iguala el adapter al creado arriba
             recycler.adapter = adapter
 
-            (requireActivity() as AppCompatActivity).supportActionBar?.title = getString(R.string.app_name)
-
         }
+
+        //observa el viewModel y mira el estado
         viewModel.state.observe(viewLifecycleOwner){state->
 
+            //Si el la variable loading en el viewModel tiene valor true se pone en visible si esta en false se oculta
             binding.progressBar.visibility = if (state.loading) View.VISIBLE else View.GONE
 
+            //Mira el valor de las recetas y igualamos la lista de recetas del adapter a las del mainViewModel
             state.recipes?.let {recipes ->
 
                 adapter.recipes = recipes
@@ -50,8 +54,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 viewModel.onNavigateDone()
             }
 
+            //Pone un escuchador de eventos para cuando se haga click en el buscador y busque
             binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
 
+                //Cuando se envia el texto
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     if (p0 != null) {
                         adapter.filtrado(p0)
@@ -59,6 +65,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     return false
                 }
 
+                //Cuando el texto esta cambiando
                 override fun onQueryTextChange(p0: String?): Boolean {
                     if (p0 != null) {
                         adapter.filtrado(p0)

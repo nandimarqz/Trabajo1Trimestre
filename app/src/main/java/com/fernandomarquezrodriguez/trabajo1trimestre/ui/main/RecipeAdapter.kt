@@ -47,21 +47,29 @@ class RecipeAdapter(val listener : (Recipe) ->Unit): RecyclerView.Adapter<Recipe
 
     }
 
+    /**
+     * Filtra las recetas con la cadena de caracteres pasado por parametro y devuelve
+     * una lista con las recetas que contengan esa cadena de caracteres en su titulo
+     */
     fun filtrado(txtSearchView : String){
+
 
         val longitud = txtSearchView.length
 
+        //Si la longitud de la cadena de caracteres es 0 devolvemos todas las reecetas
         if(longitud == 0) {
 
             recipes = emptyList<Recipe>()
             recipes = originalRecipes
 
         }else{
+            //Depende de la version del SDK hay que realizarlo de una manera u otra
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
                  coleccion =
                      recipes.stream().filter{ i-> i.title.lowercase(Locale.getDefault()).contains(txtSearchView.lowercase(Locale.getDefault()))}.toList() as MutableList<Recipe>
+                 recipes = coleccion
 
-                recipes = coleccion
             } else {
                 recipes.forEach {recipe ->
 
